@@ -15,5 +15,8 @@ public class TestMusicSwitcher : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space))
             BackgroundMusic.instance.SwapMusic();
+
+        if(Input.GetKeyDown(KeyCode.S))
+            LevelLoader.instance.LoadNextLevel();
     }
 }
