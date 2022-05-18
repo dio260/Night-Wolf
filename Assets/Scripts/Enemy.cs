@@ -11,100 +11,42 @@ public class Enemy : MonoBehaviour
 
     //array of positions that the enemy travels to
     public Transform[] waypoints;
+    public int speed;
+
     int waypointIndex;
+    private float distance;
 
-    //allows you to know what you are colliding with
-    public LayerMask whatIsGround;
-    public LayerMask whatIsPlayer;
-
-    //will be uncommented when there is a model to use with animation
-    //private Animation anim;
-
-    //Patroling 
-    public Vector3 target;
-    bool walkPointSet;
-    public float walkPointRange;
-
-    //attacking
-    public float timeBetweenAttacks;
-    bool alreadyAttacked;
-
-    //states
-    public float sightRange;
-    public float attackRange;
-
-    public bool playerInSightRange;
-    public bool playerInAttackRange;
+    private void Start()
+    {
+        waypointIndex = 0;
+        transform.LookAt(waypoints[waypointIndex].position);
+    }
 
     private void Update()
     {
+        distance = Vector3.Distance(transform.position, waypoints[waypointIndex].position);
 
-        //check that the player is in sight and attack range
-        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
-
-        //makes the enemy patrol
-        if (Vector3.Distance(transform.position, target) < 1)
+        if(distance < 0.5f)
         {
-            IterateWaypointIndex();
-            UpdateDestination();
+            IncreaseIndex();
         }
-        
-        //if statements used to go between states
-        if(playerInSightRange && !playerInAttackRange)
-        {
-            ChasePlayer();
-        }
-
-        if(playerInAttackRange && playerInSightRange)
-        {
-            AttackPlayer();
-        }
-
-
-
+        Patrol();
     }
 
-    
-
-    private void ChasePlayer()
+    void Patrol()
     {
-        agent.SetDestination(player.position);
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 
-    private void AttackPlayer()
-    {
-
-    }
-
-    void Start()
-    {
-
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-
-        UpdateDestination();
-
-        //will be uncommented when there is a model to use with animation
-        //anim = gameObject.GetComponent<Animation>();
-
-    }
-
-
-    void UpdateDestination()
-    {
-
-        target = waypoints[waypointIndex].position;
-        agent.SetDestination(target);
-
-    }
-
-    void IterateWaypointIndex()
+    void IncreaseIndex()
     {
         waypointIndex++;
-        if(waypointIndex == waypoints.Length)
+        if (waypointIndex >= waypoints.Length)
         {
             waypointIndex = 0;
         }
+        transform.LookAt(waypoints[waypointIndex].position);
     }
+
 
 }
