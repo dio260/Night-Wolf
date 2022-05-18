@@ -5,8 +5,6 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 
-    private UnityEngine.AI.NavMeshAgent agent;
-
     public Transform player;
 
     //array of positions that the enemy travels to
