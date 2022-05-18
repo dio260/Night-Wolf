@@ -7,6 +7,9 @@ public class Enemy : MonoBehaviour
 
     public Transform player;
 
+    private UnityEngine.AI.NavMeshAgent agent;
+    private Animator animator;
+
     //array of positions that the enemy travels to
     public Transform[] waypoints;
     public int speed;
