@@ -15,10 +15,17 @@ public class LevelLoader : MonoBehaviour
             Destroy(this);
         else
             instance = this;
+
+        SceneManager.sceneLoaded += OnSceneLoad;
     }
     public void LoadNextLevel()
     {
         StartCoroutine(LoadLevel(SceneManager.GetActiveScene().buildIndex + 1));
+    }
+    void OnSceneLoad(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("new scene Loaded");
+        transition.SetTrigger("End");
     }
 
     IEnumerator LoadLevel(int levelIndex)
