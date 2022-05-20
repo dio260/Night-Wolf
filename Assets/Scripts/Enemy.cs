@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     public Transform player;
 
     private UnityEngine.AI.NavMeshAgent agent;
-    private Animator animator;
+    private Animator anim;
 
     //array of positions that the enemy travels to
     public Transform[] waypoints;
@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
     {
         waypointIndex = 0;
         transform.LookAt(waypoints[waypointIndex].position);
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
@@ -48,6 +49,15 @@ public class Enemy : MonoBehaviour
         }
         transform.LookAt(waypoints[waypointIndex].position);
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.name == "player")
+        {
+            agent.destination = player.position;
+        }
+    }
+
 
 
 }

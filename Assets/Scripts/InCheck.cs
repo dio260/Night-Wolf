@@ -8,7 +8,7 @@ public class InCheck : MonoBehaviour {
 
     void Awake()
     {
-        text = GameObject.Find("Text").GetComponent<Text>();
+        //text = GameObject.Find("Text").GetComponent<Text>();
     }
 
 	// Use this for initialization
@@ -23,13 +23,13 @@ public class InCheck : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        text.text = "IN";
-        text.color = Color.red;
+        //text.text= "IN";
+        //text.color = Color.red;
     }
 
     void OnTriggerExit(Collider other)
     {
-        text.text = "OUT";
-        text.color = Color.blue;
+       //text.text = "OUT";
+       //text.color = Color.blue;
     }
 }
