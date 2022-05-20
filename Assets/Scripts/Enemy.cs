@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
 
     public Transform player;
 
-    private UnityEngine.AI.NavMeshAgent agent;
+    private NavMeshAgent agent;
     private Animator anim;
 
     //array of positions that the enemy travels to
@@ -22,22 +23,31 @@ public class Enemy : MonoBehaviour
         waypointIndex = 0;
         transform.LookAt(waypoints[waypointIndex].position);
         anim = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+        agent.destination = waypoints[waypointIndex].position;
+
+        //anim.SetTrigger("Idle");
     }
 
     private void Update()
     {
+        
         distance = Vector3.Distance(transform.position, waypoints[waypointIndex].position);
+        //Debug.Log(distance);
 
-        if(distance < 0.5f)
+        if(distance < 0.6f)
         {
+            //Debug.Log("next point");
             IncreaseIndex();
         }
         Patrol();
+        
     }
 
     void Patrol()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        //transform.Translate(Vector3.forward * speed * Time.deltaTime);\
+        agent.destination = waypoints[waypointIndex].position;
     }
 
     void IncreaseIndex()
@@ -52,7 +62,7 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.name == "player")
+        if(collision.gameObject.tag == "Player")
         {
             agent.destination = player.position;
         }
