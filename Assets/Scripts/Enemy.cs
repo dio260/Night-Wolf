@@ -44,7 +44,7 @@ public class Enemy : MonoBehaviour
         
     }
 
-    void Patrol()
+    public void Patrol()
     {
         //transform.Translate(Vector3.forward * speed * Time.deltaTime);\
         agent.destination = waypoints[waypointIndex].position;
@@ -60,11 +60,19 @@ public class Enemy : MonoBehaviour
         transform.LookAt(waypoints[waypointIndex].position);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collider)
     {
-        if(collision.gameObject.tag == "Player")
+        if(collider.gameObject.tag == "Player 1")
         {
             agent.destination = player.position;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag != "Player 1")
+        {
+            Patrol();
         }
     }
 

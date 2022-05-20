@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.AI;
 
 public class InCheck : MonoBehaviour {
 
     private Text text;
+
+    private Transform enemy;
+    private Transform player;
 
     void Awake()
     {
@@ -23,13 +27,11 @@ public class InCheck : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        //text.text= "IN";
-        //text.color = Color.red;
+        //agent.destination = player.position;
     }
 
     void OnTriggerExit(Collider other)
     {
-       //text.text = "OUT";
-       //text.color = Color.blue;
+        //Patrol();
     }
 }
