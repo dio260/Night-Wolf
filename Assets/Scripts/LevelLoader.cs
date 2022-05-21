@@ -9,7 +9,7 @@ public class LevelLoader : MonoBehaviour
 
     public static LevelLoader instance;
 
-    private void Awake()
+    private void Start()
     {
         if (instance != null && instance != this)
             Destroy(this);

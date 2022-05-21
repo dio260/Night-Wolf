@@ -14,6 +14,7 @@ public class BackgroundMusic : MonoBehaviour
     void Awake()
     {
         player = GetComponent<AudioSource>();
+        //player.clip = normal;
         if (instance != null && instance != this)
             Destroy(this);
         else

@@ -5,53 +5,93 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-
+    //external references
     public Transform player;
-
-    private NavMeshAgent agent;
     private Animator anim;
+    public int speed;
+    public bool pivot;
 
+    //pivot
+    [Header("Pivot Options")]
+    public float rotateDelay;
+    public Vector3[] rotateAngles;
+    int rotationIndex;
+    float timer;
+
+    //patrol
+    [Header("Patrol Options")]
+    private NavMeshAgent agent;
     private bool isChasing = false;
 
     //array of positions that the enemy travels to
     public Transform[] waypoints;
-    public int speed;
-
     int waypointIndex;
     private float distance;
 
     private void Start()
     {
-        waypointIndex = 0;
-        transform.LookAt(waypoints[waypointIndex].position);
+        
+        
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        agent.destination = waypoints[waypointIndex].position;
+        if(!pivot)
+        {
+            waypointIndex = 0;
+            transform.LookAt(waypoints[waypointIndex].position);
+            agent.destination = waypoints[waypointIndex].position;
+        }
+        else
+            anim.SetTrigger("Idle");
 
-        //anim.SetTrigger("Idle");
+        //
     }
 
     private void Update()
     {
-        
-        distance = Vector3.Distance(transform.position, waypoints[waypointIndex].position);
-        //Debug.Log(distance);
-
-        if(distance < 0.6f && isChasing == false)
+        //Debug.Log(transform.localEulerAngles.y);
+        if(isChasing)
         {
-            //Debug.Log("next point");
-            IncreaseIndex();
+            agent.destination = player.position;
+            return;
         }
+        
+        if(!pivot)
+        {
+            distance = Vector3.Distance(transform.position, waypoints[waypointIndex].position);
+            //Debug.Log(distance);
+            if(distance < 0.6f)
+            {
+                //Debug.Log("next point");
+                IncreaseIndex();
+            }
+            Patrol();
+        }
+        else
+        {
 
-        Patrol();
+            if(timer > rotateDelay)
+            {
+                // Debug.Log("Rotating");
+                StartCoroutine(Pivot());
+                timer = 0;
+            }
+            else
+                timer += Time.deltaTime;
+            
+            // if(Vector3.Distance(transform.localRotation.eulerAngles, rotateAngles[rotationIndex]) < 1f)
+            // {
 
-        //OnTriggerEnter("ConeCollider");
+            // }
+        }
+        
+        
+
         
     }
 
     public void Patrol()
     {
-        //transform.Translate(Vector3.forward * speed * Time.deltaTime);\
+        //transform.Translate(Vector3.forward * speed * Time.deltaTime);
         agent.destination = waypoints[waypointIndex].position;
     }
 
@@ -67,19 +107,37 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        isChasing = true;
+        
         if(collider.gameObject.tag == "Player 1")
         {
-            agent.destination = player.position;
+            isChasing = true;
         }
     }
 
+    /*
     private void OnTriggerExit(Collider other)
     {
         isChasing = false;
         Patrol();
     }
+    */
 
+    IEnumerator Pivot()
+    {
+        // Debug.Log(Mathf.Abs(transform.localRotation.eulerAngles.y - rotateAngles[rotationIndex].y));
+        while(Mathf.Abs(transform.localRotation.eulerAngles.y - rotateAngles[rotationIndex].y) > 1f)
+        {
+            if(transform.localEulerAngles.y > rotateAngles[rotationIndex].y)
+                transform.Rotate(new Vector3(0, -0.1f, 0), Space.Self);
+            else
+                transform.Rotate(new Vector3(0, 0.1f, 0), Space.Self);
+        }
 
+        rotationIndex = (rotationIndex + 1) % rotateAngles.Length;
+        // Debug.Log(rotationIndex);
+
+        timer = 0;
+        yield return null;
+    }
 
 }

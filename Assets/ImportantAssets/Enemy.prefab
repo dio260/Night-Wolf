@@ -103,6 +103,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 02aec161cce7a284594744378fdbb601, type: 2}
+    - target: {fileID: 13700000, guid: e4299bf26a09e9049839e1a1b75e562c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 06e5d878f6254cb4da625716f78a57f4, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4299bf26a09e9049839e1a1b75e562c, type: 3}
 --- !u!1 &6114835600462906361 stripped
@@ -128,11 +132,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  speed: 4
+  pivot: 0
+  rotateDelay: 0
+  rotateAngles: []
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  speed: 4
 --- !u!195 &2119315974
 NavMeshAgent:
   m_ObjectHideFlags: 0
