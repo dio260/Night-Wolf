@@ -11,6 +11,8 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent agent;
     private Animator anim;
 
+    private bool isChasing = false;
+
     //array of positions that the enemy travels to
     public Transform[] waypoints;
     public int speed;
@@ -35,12 +37,15 @@ public class Enemy : MonoBehaviour
         distance = Vector3.Distance(transform.position, waypoints[waypointIndex].position);
         //Debug.Log(distance);
 
-        if(distance < 0.6f)
+        if(distance < 0.6f && isChasing == false)
         {
             //Debug.Log("next point");
             IncreaseIndex();
         }
+
         Patrol();
+
+        //OnTriggerEnter("ConeCollider");
         
     }
 
@@ -62,6 +67,7 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
+        isChasing = true;
         if(collider.gameObject.tag == "Player 1")
         {
             agent.destination = player.position;
@@ -70,10 +76,8 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.tag != "Player 1")
-        {
-            Patrol();
-        }
+        isChasing = false;
+        Patrol();
     }
 
 
